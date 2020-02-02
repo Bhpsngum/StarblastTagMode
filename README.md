@@ -15,8 +15,6 @@ The game ends when one team "tags" all the players in that server.
 * Team stats and Leaderboard in scoreboard for all players (with team colors!)
 * Number of players per team will be updated through logging in the console (you can disable or enable them by using `update_stats <disable/enable>` command)
 
-Feel free to use and contribute to make the mod better by creating a [pull request](https://github.com/Bhpsngum/Starblast_Tag_Mode/pulls).
-
-I will credit you as well!
+Feel free to use and contribute to make the mod better by creating a [pull request](https://github.com/Bhpsngum/Starblast_Tag_Mode/pulls). I will credit you as well!
 
 **Thanks for reading and playing my mod! :)**
