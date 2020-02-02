@@ -9,6 +9,7 @@ The game ends when one team "tags" all the players in that server.
 ## Starblast Tag Mode - general description
 
 * Max players: 40
+* Number of teams: 4
 * Map size: 60
 * Map pattern: randomly created by the server
 * Team stats and Leaderboard in scoreboard for all players (with team colors!)
