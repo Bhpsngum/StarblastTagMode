@@ -6,7 +6,7 @@ by Bhpsngum
 I've first seen this mode when I play [Diep.io](https://diep.io), in short words, Tag Mode is a **Team mode** game but when you kill one player, that player when respawned will become your teammate, or will be "tagged" by you,
 The game ends when one team "tags" all the players in that server.
 
-## Starblast Tag Mode - general description
+## Starblast Tag Mode - short description
 
 * Max players: 40
 * Number of teams: 4
