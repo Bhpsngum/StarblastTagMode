@@ -1,4 +1,4 @@
-# Starblast Tag Mode
+# Starblast Tag Mode - Tag This Mode!
 by Bhpsngum
 
 ## What is Tag Mode?
