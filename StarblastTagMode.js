@@ -47,7 +47,7 @@ this.options = {
   radar_zoom:1,
   starting_ship_maxed:false,
   weapon_drop:0.25,
-  max_players:40,
+  max_players:120,
   weapons_store:false,
   rcs_toggle:true,
   map_size:40,
