@@ -146,7 +146,7 @@ PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
 };
 Tag = function(indtext,param,pos,hex,al) {
-  var obj= { type: indtext,position: [(al == "right")?60:0,pos,38,8],color: hex,align:al};
+  var obj= { type: indtext,position: [(al == "right")?60:0,pos,(indtext == "player")?75:25,8],color: hex,align:al};
   switch(indtext) {
     case "text":
       obj.value=param;
