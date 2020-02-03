@@ -270,7 +270,7 @@ this.event = function(event,game) {
      }
      if (event.ship !== null) {
        event.ship.death++;
-       event.ship.set({score:Math.floor(event.ship.score/2)});
+       event.ship.set({score:Math.ceil(event.ship.score/2)});
      }
      break;
  }
