@@ -3,7 +3,7 @@ var hexcolorcode=["#F00","#ffff00","#0FF","#ffc0cb"];
 var colors=["Red","Yellow","Cyan","Pink"];
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
 var sides=[0,0,0,0];
-var endgame=0,dominate=-1,predominate=-1,upside=0,loginfo=1;logstats=1;
+var endgame=0,dominate=-1,predominate=-1,upside=1,loginfo=1,logstats=1,end=0;
 var vocabulary = [
       { text: "Hello", icon:"\u0045", key:"O" },
       { text: "Bye", icon:"\u0046", key:"B" },
@@ -92,8 +92,10 @@ updatescoreboard = function(game) {
   var line=1;
   var pos=sort(sides);
   for (var i=0;i<4;i++) {
-    scoreboard.components.push({ type: "text",position: [0,line*10+1.5,60,7],color: hexcolorcode[pos[i]],align:"left",value:colors[pos[i]]});
-    scoreboard.components.push({ type: "text",position: [60,line*10+1,38,8],color: hexcolorcode[pos[i]],value: sides[pos[i]],align:"right"});
+    scoreboard.components.push(
+      new Tag("text",colors[pos[i]],line*10+1,hexcolorcode[pos[i]],"left"),
+      new Tag("text",sides[pos[i]],line*10+1,hexcolorcode[pos[i]],"right")
+    );
     line++;
   }
   scoreboard.components.push({ type:"box",position:[0,line*10+1,100,8],fill:"#456",stroke:"#CDE",width:2});
@@ -108,8 +110,10 @@ updatescoreboard = function(game) {
   }
   var topp=sort(lead).slice(0,4);
   for (var i=0;i<topp.length;i++) {
-    scoreboard.components.push({ type: "player",position: [0,line*10+1.5,60,7],color: hexcolorcode[game.ships[topp[i]].team],align:"left",id:game.ships[topp[i]].id});
-    scoreboard.components.push({ type: "text",position: [60,line*10+1,38,8],color: hexcolorcode[game.ships[topp[i]].team],value: game.ships[topp[i]].score,align:"right"});
+    scoreboard.components.push(
+      new Tag("player",game.ships[topp[i]].id,line*10+1,hexcolorcode[game.ships[topp[i]].team],"left"),
+      new Tag("text",game.ships[topp[i]].score,line*10+1,hexcolorcode[game.ships[topp[i]].team],"right")
+    );
     line++;
   }
   for (let ship of game.ships) deco(ship,pos,topp);
@@ -117,17 +121,17 @@ updatescoreboard = function(game) {
 deco = function(ship,stats,score) {
   var line=stats.indexOf(ship.team);
   var origin=[...scoreboard.components];
-  scoreboard.components.splice(line*2+2,0,{ type:"box",position:[0,(line+1)*10+1,100,8],fill:"#384A5C",width:2});
+  scoreboard.components.splice(line*2+2,0,new PlayerBox((line+1)*10));
   line=score.indexOf(game.ships.indexOf(ship));
   if (line == -1) {
     scoreboard.components.splice(scoreboard.components.length-2,2,
-      { type:"box",position:[0,91,100,8],fill:"#384A5C",width:2},
-      { type: "player",position: [0,91.5,60,7],color: hexcolorcode[ship.team],align:"left",id:ship.id},
-      { type: "text",position: [60,91,38,8],color: hexcolorcode[ship.team],value: ship.score,align:"right"}
-    );  
+      new PlayerBox(90),
+      new Tag("player",ship.id,91,hexcolorcode[ship.team],"left"),
+      new Tag("text",ship.score,91,hexcolorcode[ship.team],"right")
+    );
   }
   else {
-    scoreboard.components.splice(line*2+13,0,{ type:"box",position:[0,(line+6)*10+1,100,8],fill:"#384A5C",width:2});
+    scoreboard.components.splice(line*2+13,0,new PlayerBox((line+6)*10));
   }
   ship.setUIComponent(scoreboard);
   scoreboard.components=[...origin];
@@ -143,6 +147,21 @@ updatesides = function(game) {
     echo(ec);
   }
 };
+PlayerBox = function(pos) {
+  return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
+};
+Tag = function(indtext,param,pos,hex,al) {
+  var obj= { type: indtext,position: [(al == "right")?60:0,pos,38,8],color: hex,align:al};
+  switch(indtext) {
+    case "text":
+      obj.value=param;
+      break;
+    case "player":
+      obj.id=param;
+      break;
+  }
+  return obj;
+};
 update = function(game) {
   var loop=0;
   for (var i=0;i<4;i++) {
@@ -150,7 +169,7 @@ update = function(game) {
       loop++;
       predominate=dominate;
       dominate=i;
-    } 
+    }
   }
   if (loop>1) dominate=-1;
   if (dominate != predominate && dominate != -1 && game.ships.length > 1) {
@@ -162,7 +181,7 @@ update = function(game) {
   updatescoreboard(game);
 };
 game.modding.commands.update_stats = function(req) {
-  switch (req.replace(/\s+/g," ").split(' ')[1].toUpperCase()) {
+  switch ((req.replace(/\s+/g," ").split(' ')[1]||"").toUpperCase()) {
     case "ENABLE":
       logstats=1;
       echo("Enabled!");
@@ -171,9 +190,11 @@ game.modding.commands.update_stats = function(req) {
       logstats=0;
       echo("Disabled!");
       break;
+    case "":
+      game.modding.terminal.error("TypeError: missing parameter");
+      break;
     default:
-      echo("I told you to type only 'disable' or 'enable'");
-      echo("BAKA!!");
+      echo("I told you to type only 'disable' or 'enable'\nBAKA!!");
   }
 }
 game.modding.tick = function(t) {
@@ -188,13 +209,12 @@ this.tick = function(game) {
     echo("\nStarblast Tag Mode - by Bhpsngum");
     echo("type 'update_stats enable/disable' to enable/disable");
     echo("team stats update logs\n");
-    echo("Red: 0 ; Yellow: 0 ; Cyan: 0 ; Pink: 0 ; ");
   }
   if (game.step % 30 === 0) {
-    if (game.step % 1200 === 0) 
+    if (game.step % 1200 === 0)
     {
-      let x = (Math.random()-0.5) * game.options.map_size*10 ;
-      let y = (Math.random()-0.5) * game.options.map_size*10 ;
+      var x=letsrand(game.options.map_size*20)-game.options.map_size*10;
+      var y=letsrand(game.options.map_size*20)-game.options.map_size*10;
       game.addCollectible({code:collectibles[letsrand(10)],x:x,y:y});
     }
     for (let ship of game.ships) {
@@ -216,22 +236,22 @@ this.tick = function(game) {
     if (Math.max(...sides) == game.ships.length && game.step > 18000 && endgame === 0) {
       endgame=1;
       for (let ship of game.ships) {
-        var inf;
-        if (game.ships.length>1) inf=colors[sides.indexOf(Math.max(...sides))]+" team wins!";
-        else inf="Game Over!";
-        updateinfo(ship,inf,hexcolorcode[sides.indexOf(Math.max(...sides))]);
+        updateinfo(ship,colors[sides.indexOf(Math.max(...sides))]+" team wins!",hexcolorcode[sides.indexOf(Math.max(...sides))]);
         setTimeout(function() {
           ship.gameover({
             "Score":ship.score,
             "Frags":ship.frag,
             "Deaths":ship.death,
-            "High score":ship.highscore,              
+            "High score":ship.highscore,
             "First team joined":colors[ship.custom.init.team],
             "Last team joined":colors[ship.team]
           });
         },4000);
       }
+    }
+    if (game.ships.length === 0 && endgame == 1 && end === 0) {
       echo("Game completed!\nThanks for playing!");
+      end=1;
     }
   }
 };
