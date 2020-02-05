@@ -3,7 +3,7 @@ var hexcolorcode=["#F00","#ffff00","#0FF","#ffc0cb"];
 var colors=["Red","Yellow","Cyan","Pink"];
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
 var sides=[0,0,0,0];
-var endgame=0,dominate=-1,predominate=-1,upside=1,loginfo=1,logstats=1,end=0;
+var endgame=0,dominate=-1,predominate=-1,upside=1;
 var vocabulary = [
       { text: "Hello", icon:"\u0045", key:"O" },
       { text: "Bye", icon:"\u0046", key:"B" },
@@ -140,11 +140,6 @@ updatesides = function(game) {
   for (let ship of game.ships) {
     if (ship.alive === true) sides[ship.team]++;
   }
-  if (logstats == 1) {
-    var ec="";
-    for (var i=0;i<4;i++) ec+=colors[i]+": "+sides[i]+" ; ";
-    echo(ec);
-  }
 };
 PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
@@ -179,36 +174,7 @@ update = function(game) {
   }
   updatescoreboard(game);
 };
-game.modding.commands.update_stats = function(req) {
-  switch ((req.replace(/\s+/g," ").split(' ')[1]||"").toUpperCase()) {
-    case "ENABLE":
-      logstats=1;
-      echo("Enabled!");
-      break;
-    case "DISABLE":
-      logstats=0;
-      echo("Disabled!");
-      break;
-    case "":
-      game.modding.terminal.error("TypeError: missing parameter");
-      break;
-    default:
-      echo("I told you to type only 'disable' or 'enable'\nBAKA!!");
-  }
-}
-game.modding.tick = function(t) {
-  this.game.tick(t);
-  if (this.context.tick != null) {
-    this.context.tick(this.game);
-  }
-};
 this.tick = function(game) {
-  if (loginfo == 1) {
-    loginfo=0;
-    echo("\nStarblast Tag Mode - by Bhpsngum");
-    echo("type 'update_stats enable/disable' to enable/disable");
-    echo("team stats update logs\n");
-  }
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
     {
@@ -247,10 +213,6 @@ this.tick = function(game) {
           });
         },4000);
       }
-    }
-    if (game.ships.length === 0 && endgame == 1 && end === 0) {
-      echo("Game completed!\nThanks for playing!");
-      end=1;
     }
   }
 };
