@@ -60,10 +60,10 @@ letsrand = function(lol) {
   return Math.floor((Math.random() * lol));
 };
 sort = function(arr) {
-  var array=[...arr];
-  var index=new Array(array.length);
-  for (var c=0;c<index.length;c++) index[c]=c;
-  var i=0;
+  let array=[...arr];
+  let index=new Array(array.length);
+  for (let c=0;c<index.length;c++) index[c]=c;
+  let i=0;
   while (i<array.length-1) {
     if (array[i]<array[i+1]) {
       array[i+1]=[array[i],array[i]=array[i+1]][0];
@@ -89,9 +89,9 @@ updatescoreboard = function(game) {
     { type:"box",position:[0,1,100,8],fill:"#456",stroke:"#CDE",width:2},
     { type: "text",position: [0,1,100,8],color: "#FFF",value: "Team stats"}
   ];
-  var line=1;
-  var pos=sort(sides);
-  for (var i=0;i<4;i++) {
+  let line=1;
+  let pos=sort(sides);
+  for (let i=0;i<4;i++) {
     scoreboard.components.push(
       new Tag("text",colors[pos[i]],line*10+1,hexcolorcode[pos[i]],"left"),
       new Tag("text",sides[pos[i]]+" 🚀",line*10+1,hexcolorcode[pos[i]],"right",5)
@@ -103,15 +103,15 @@ updatescoreboard = function(game) {
     { type: "text",position: [0,line*10+1,100,8],color: "#FFF",value: "Leaderboard"}
   );
   line++;
-  var lead=new Array(game.ships.length);
-  for (var i=0;i<lead.length;i++) lead[i]=0;
-  var ind=0;
+  let lead=new Array(game.ships.length);
+  for (let i=0;i<lead.length;i++) lead[i]=0;
+  let ind=0;
   for (let ship of game.ships) {
     lead[ind]=ship.score;
     ind++;
   }
-  var topp=sort(lead).slice(0,4);
-  for (var i=0;i<topp.length;i++) {
+  let topp=sort(lead).slice(0,4);
+  for (let i=0;i<topp.length;i++) {
     scoreboard.components.push(
       new Tag("player",game.ships[topp[i]].id,line*10+1,hexcolorcode[game.ships[topp[i]].team],"left"),
       new Tag("text",game.ships[topp[i]].score,line*10+1,hexcolorcode[game.ships[topp[i]].team],"right")
@@ -121,8 +121,8 @@ updatescoreboard = function(game) {
   for (let ship of game.ships) deco(ship,pos,topp);
 };
 deco = function(ship,stats,score) {
-  var line=stats.indexOf(ship.team);
-  var origin=[...scoreboard.components];
+  let line=stats.indexOf(ship.team);
+  let origin=[...scoreboard.components];
   scoreboard.components.splice(line*2+2,0,new PlayerBox((line+1)*10));
   line=score.indexOf(game.ships.indexOf(ship));
   if (line == -1) {
@@ -148,7 +148,7 @@ PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
 };
 Tag = function(indtext,param,pos,hex,al,size) {
-  var obj= {type: indtext,position: [(al == "right")?70:0,pos,((indtext == "player")?100:25)+(size||0),8],color: hex,align:al};
+  let obj= {type: indtext,position: [(al == "right")?70:0,pos,((indtext == "player")?100:25)+(size||0),8],color: hex,align:al};
   switch(indtext) {
     case "text":
       obj.value=param;
@@ -160,8 +160,8 @@ Tag = function(indtext,param,pos,hex,al,size) {
   return obj;
 };
 update = function(game) {
-  var loop=0;
-  for (var i=0;i<4;i++) {
+  let loop=0;
+  for (let i=0;i<4;i++) {
     if (sides[i] == Math.max(...sides)) {
       loop++;
       predominate=dominate;
@@ -181,8 +181,8 @@ this.tick = function(game) {
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
     {
-      var x=letsrand(game.options.map_size*20)-game.options.map_size*10;
-      var y=letsrand(game.options.map_size*20)-game.options.map_size*10;
+      let x=letsrand(game.options.map_size*20)-game.options.map_size*10;
+      let y=letsrand(game.options.map_size*20)-game.options.map_size*10;
       game.addCollectible({code:collectibles[letsrand(10)],x:x,y:y});
     }
     for (let ship of game.ships) {
