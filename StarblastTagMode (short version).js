@@ -120,6 +120,24 @@ updatescoreboard = function(game) {
   }
   for (let ship of game.ships) deco(ship,pos,topp);
 };
+deco = function(ship,stats,score) {
+  var line=stats.indexOf(ship.team);
+  var origin=[...scoreboard.components];
+  scoreboard.components.splice(line*2+2,0,new PlayerBox((line+1)*10));
+  line=score.indexOf(game.ships.indexOf(ship));
+  if (line == -1) {
+    scoreboard.components.splice(scoreboard.components.length-2,2,
+      new PlayerBox(90),
+      new Tag("player",ship.id,91,hexcolorcode[ship.team],"left"),
+      new Tag("text",ship.score,91,hexcolorcode[ship.team],"right")
+    );
+  }
+  else {
+    scoreboard.components.splice(line*2+13,0,new PlayerBox((line+6)*10));
+  }
+  ship.setUIComponent(scoreboard);
+  scoreboard.components=[...origin];
+};
 updatesides = function(game) {
   sides=[0,0,0,0];
   for (let ship of game.ships) {
