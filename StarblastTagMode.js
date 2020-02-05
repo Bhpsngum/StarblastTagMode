@@ -85,9 +85,10 @@ updateinfo = function(ship,text,color) {
   setTimeout(function(){ship.setUIComponent(info)},3000);
 };
 updatescoreboard = function(game) {
-  scoreboard.components=[
+  scoreboard.components = [
     { type:"box",position:[0,1,100,8],fill:"#456",stroke:"#CDE",width:2},
-    { type: "text",position: [0,1,100,8],color: "#FFF",value: "Team stats"}];
+    { type: "text",position: [0,1,100,8],color: "#FFF",value: "Team stats"}
+  ];
   var line=1;
   var pos=sort(sides);
   for (var i=0;i<4;i++) {
@@ -97,8 +98,10 @@ updatescoreboard = function(game) {
     );
     line++;
   }
-  scoreboard.components.push({ type:"box",position:[0,line*10+1,100,8],fill:"#456",stroke:"#CDE",width:2});
-  scoreboard.components.push({ type: "text",position: [0,line*10+1,100,8],color: "#FFF",value: "Leaderboard"});
+  scoreboard.components.push(
+    { type:"box",position:[0,line*10+1,100,8],fill:"#456",stroke:"#CDE",width:2},
+    { type: "text",position: [0,line*10+1,100,8],color: "#FFF",value: "Leaderboard"}
+  );
   line++;
   var lead=new Array(game.ships.length);
   for (var i=0;i<lead.length;i++) lead[i]=0;
