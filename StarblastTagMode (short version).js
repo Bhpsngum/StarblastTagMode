@@ -181,8 +181,8 @@ this.tick = function(game) {
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
     {
-      let x=letsrand(game.options.map_size*20)-game.options.map_size*10;
-      let y=letsrand(game.options.map_size*20)-game.options.map_size*10;
+      let x=letsrand(this.options.map_size*20)-this.options.map_size*10;
+      let y=letsrand(this.options.map_size*20)-this.options.map_size*10;
       game.addCollectible({code:collectibles[letsrand(10)],x:x,y:y});
     }
     for (let ship of game.ships) {
