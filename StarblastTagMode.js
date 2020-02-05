@@ -47,7 +47,7 @@ this.options = {
   radar_zoom:1,
   starting_ship_maxed:false,
   weapon_drop:0.25,
-  max_players:120,
+  max_players:40,
   weapons_store:false,
   rcs_toggle:true,
   map_size:40,
@@ -93,7 +93,7 @@ updatescoreboard = function(game) {
   for (var i=0;i<4;i++) {
     scoreboard.components.push(
       new Tag("text",colors[pos[i]],line*10+1,hexcolorcode[pos[i]],"left"),
-      new Tag("text",sides[pos[i]],line*10+1,hexcolorcode[pos[i]],"right")
+      new Tag("text",sides[pos[i]]+" 🚀",line*10+1,hexcolorcode[pos[i]],"right",5)
     );
     line++;
   }
@@ -149,8 +149,8 @@ updatesides = function(game) {
 PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
 };
-Tag = function(indtext,param,pos,hex,al) {
-  var obj= {type: indtext,position: [(al == "right")?70:0,pos,(indtext == "player")?100:25,8],color: hex,align:al};
+Tag = function(indtext,param,pos,hex,al,size) {
+  var obj= {type: indtext,position: [(al == "right")?70:0,pos,((indtext == "player")?100:25)+(size||0),8],color: hex,align:al};
   switch(indtext) {
     case "text":
       obj.value=param;
@@ -269,7 +269,7 @@ this.event = function(event,game) {
      }
      if (event.ship !== null) {
        event.ship.death++;
-       event.ship.set({score:Math.ceil(event.ship.score/2)});
+       event.ship.set({score:Math.floor(event.ship.score/2)});
      }
      break;
  }
