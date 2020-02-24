@@ -22,7 +22,7 @@ The game ends when one team "tags" all the players in that server.
 
 There are 2 codes available:
 * [Full version](StarblastTagMode.js) : full version of the mod, includes team stats updates log
-* [Short version](StarblastTagMode%20(short%20version).js) : If you don't care what the f*ck the console writes :D
+* [Short version](StarblastTagMode%20(short%20version).js) (Recommended) : If you don't care what the f*ck the console writes :D
 
 ~~(*also you can add this [extra code](extra.js) to the end of the mod code to see some new features :D*)~~
 ```js
