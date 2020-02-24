@@ -3,7 +3,7 @@ var hexcolorcode=["#F00","#ffff00","#0FF","#ffc0cb"];
 var colors=["Red","Yellow","Cyan","Pink"];
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
 var sides=[0,0,0,0];
-var endgame=0,dominate=-1,predominate=-1,upside=1;
+var endgame=0,dominate=-1,predominate=-1;
 var vocabulary = [
       { text: "Hello", icon:"\u0045", key:"O" },
       { text: "Bye", icon:"\u0046", key:"B" },
@@ -93,8 +93,8 @@ updatescoreboard = function(game) {
   let pos=sort(sides);
   for (let i=0;i<4;i++) {
     scoreboard.components.push(
-      new Tag("text",colors[pos[i]],line*10+1,hexcolorcode[pos[i]],"left"),
-      new Tag("text",sides[pos[i]]+" 🚀",line*10+1,hexcolorcode[pos[i]],"right",5)
+      new Tag("text",sides[pos[i]]+" 🚀",line*10+1,hexcolorcode[pos[i]],"right"),
+      new Tag("text",colors[pos[i]],line*10+1,hexcolorcode[pos[i]],"left")
     );
     line++;
   }
@@ -113,8 +113,8 @@ updatescoreboard = function(game) {
   let topp=sort(lead).slice(0,4);
   for (let i=0;i<topp.length;i++) {
     scoreboard.components.push(
-      new Tag("player",game.ships[topp[i]].id,line*10+1,hexcolorcode[game.ships[topp[i]].team],"left"),
-      new Tag("text",game.ships[topp[i]].score,line*10+1,hexcolorcode[game.ships[topp[i]].team],"right")
+      new Tag("text",game.ships[topp[i]].score,line*10+1,hexcolorcode[game.ships[topp[i]].team],"right",5),
+      new Tag("player",game.ships[topp[i]].id,line*10+1,hexcolorcode[game.ships[topp[i]].team],"left")
     );
     line++;
   }
@@ -128,8 +128,8 @@ deco = function(ship,stats,score) {
   if (line == -1) {
     scoreboard.components.splice(scoreboard.components.length-2,2,
       new PlayerBox(90),
-      new Tag("player",ship.id,91,hexcolorcode[ship.team],"left"),
-      new Tag("text",ship.score,91,hexcolorcode[ship.team],"right")
+      new Tag("text",ship.score,91,hexcolorcode[ship.team],"right",5),
+      new Tag("player",ship.id,91,hexcolorcode[ship.team],"left")
     );
   }
   else {
@@ -148,7 +148,7 @@ PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
 };
 Tag = function(indtext,param,pos,hex,al,size) {
-  let obj= {type: indtext,position: [(al == "right")?70:0,pos,((indtext == "player")?100:25)+(size||0),8],color: hex,align:al};
+  let obj= {type: indtext,position: [0,pos,100-(size||0),8],color: hex,align:al};
   switch(indtext) {
     case "text":
       obj.value=param;
@@ -160,6 +160,7 @@ Tag = function(indtext,param,pos,hex,al,size) {
   return obj;
 };
 update = function(game) {
+  updatesides(game);
   let loop=0;
   for (let i=0;i<4;i++) {
     if (sides[i] == Math.max(...sides)) {
@@ -187,18 +188,22 @@ this.tick = function(game) {
     }
     for (let ship of game.ships) {
       if (!ship.custom.init) {
-        ship.custom.init = {exist:true,team:ship.team};
+        let pos=sort(sides),index;
+        if (game.step > 18000 && sides[ship.team] === 0) {
+          for (index=pos.length-1;index>=0;index--) {
+            if (sides[pos[index]] > 0) {
+              ship.set({team:pos[index]});
+              break;
+            }
+          }
+        }
+        ship.custom.init = {exist:true,team:pos[index]||ship.team};
         ship.frag=0;
         ship.death=0;
         ship.highscore=ship.score;
-        ship.set({hue:colorscode[ship.team],invulnerable:300});
-        upside=1;
+        ship.set({hue:colorscode[pos[index]||ship.team],invulnerable:300});
       }
       if (ship.highscore<ship.score) ship.highscore=ship.score;
-    }
-    if (upside == 1) {
-      updatesides(game);
-      upside=0;
     }
     update(game);
     if (Math.max(...sides) == game.ships.length && game.step > 18000 && endgame === 0) {
@@ -224,10 +229,8 @@ this.event = function(event,game) {
  {
    case "ship_spawned":
      event.ship.set({hue:colorscode[event.ship.team],invulnerable:300});
-     upside=1;
      break;
    case "ship_destroyed":
-     upside=1;
      if (event.killer !== null) {
        event.ship.set({team:event.killer.team});
        event.killer.frag++;
