@@ -42,6 +42,7 @@ var scoreboard = {
 this.options = {
   map_name:"Starblast Tag Mode",
   max_level:7,
+  lives:4,
   crystal_value:5,
   asteroid_strength:0.05,
   radar_zoom:1,
@@ -279,7 +280,7 @@ this.event = function(event,game) {
      }
      if (event.ship !== null) {
        event.ship.death++;
-       event.ship.set({score:Math.floor(event.ship.score/2)});
+       event.ship.set({score:Math.ceil(event.ship.score/2)});
      }
      break;
  }
