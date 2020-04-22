@@ -48,7 +48,6 @@ this.options = {
   weapons_store:false,
   rcs_toggle:true,
   map_size:40,
-  friendly_colors:12,
   root_mode:"",
   vocabulary:vocabulary,
   soundtrack:"argon.mp3"
