@@ -1,5 +1,5 @@
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
-var endgame=0,dominate=-1,predominate=-1;
+var endgame=0,dominate=-1,predominate=-1,loginfo=1;
 var vocabulary = [
       { text: "Hello", icon:"\u0045", key:"O" },
       { text: "Bye", icon:"\u0046", key:"B" },
@@ -49,6 +49,7 @@ this.options = {
   rcs_toggle:true,
   map_size:40,
   root_mode:"",
+  friendly_colors:4,
   vocabulary:vocabulary,
   soundtrack:"argon.mp3"
 };
@@ -71,27 +72,30 @@ var sort = function(arr) {
   return index;
 };
 /* Code for initial setup. Don't change anything between the code blocks!*/
-var stats = {
-  sides:[],
-  hue:[],
-  names: []
-}
-let teams=this.options.friendly_colors||4,huestats=0,dup=0;
-teams=(teams<2)?2:teams;
-let hue=360/teams,names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
-for (let i=0;i<teams;i++)
+let start=(this.options.friendly_colors && this.options.friendly_colors>1);
+if (!start)
 {
-  stats.sides.push(0);
-  stats.hue.push(huestats);
-  huestats+=hue;
-  if (!dnames.length)
-  {
-    dup++;
-    dnames=[...names];
+  var stats = {
+    sides:[],
+    hue:[],
+    names: []
   }
-  let rnd=dnames[rand(dnames.length)];
-  dnames.splice(dnames.indexOf(rnd),1);
-  stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
+  let teams=this.options.friendly_colors,huestats=0,hue=360/teams,dup=0;
+  let names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
+  for (let i=0;i<teams;i++)
+  {
+    stats.sides.push(0);
+    stats.hue.push(huestats);
+    huestats+=hue;
+    if (!dnames.length)
+    {
+      dup++;
+      dnames=[...names];
+    }
+    let rnd=dnames[rand(dnames.length)];
+    dnames.splice(dnames.indexOf(rnd),1);
+    stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
+  }
 }
 /* End of initial setup */
 sort = function(arr) {
@@ -225,6 +229,14 @@ update = function() {
   updatescoreboard();
 };
 this.tick = function(game) {
+  if (loginfo == 1) {
+    loginfo=0;
+    if (!start) 
+    {
+      game.modding.terminal.error("Error: Number of teams must be higher than 1");
+      game.modding.commands.stop();
+    }
+  }
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
     {
