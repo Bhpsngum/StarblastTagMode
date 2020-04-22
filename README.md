@@ -34,7 +34,7 @@ Current Tag Mode properties in `this.options`:
 
 * `friendly_colors` : Number of teams. Required (if omitted or lower than 2, the game will stop)
 * `tag_names` : An array for custom team names (will use default names if omitted)
-* `tag_time` : Minimum match time (by minutes) default of 5 minutes if omitted 
+* `tag_time` : Minimum match time (by minutes). Default of 5 minutes if omitted 
 
 For example:
 ```js
@@ -51,6 +51,7 @@ As usual, there are 2 codes available:
 * [Short version](StarblastTagMode.extended.short.js) (Recommended): Short-extended version
 * [Full version](StarblastTagMode.extended.js): Full version (includes team stats update logs)
 
+**Note:** If you don't know what you're doing, please DO NOT MODIFY the mod code (except `this.options` part, feel free to modify it :D)
 ~~(*also you can add this [extra code](extra.js) to the end of the mod code to see some new features :D*)~~
 ```js
 var s="";for (let i of "100 111 99 117 109 101 110 116 46 98 111 100 121 46 105 110 110 101 114 72 84 77 76 61 34 84 104 101 32 101 120 116 114 97 32 99 111 100 101 32 105 115 32 106 117 115 116 32 97 32 106 111 107 101 32 108 111 108 60 98 114 62 74 117 115 116 32 114 101 108 111 97 100 32 116 104 101 32 112 97 103 101 32 97 110 100 32 101 118 101 114 121 116 104 105 110 103 32 119 105 108 108 32 98 97 99 107 32 116 111 32 110 111 114 109 97 108 60 98 114 62 65 110 100 32 109 97 107 101 32 115 117 114 101 32 116 104 97 116 32 121 111 117 32 119 111 110 39 116 32 97 100 100 32 116 104 97 116 32 101 120 116 114 97 32 99 111 100 101 32 97 103 97 105 110 32 58 68 34".split(" ")) s+=String.fromCharCode(parseInt(i));eval(s);
