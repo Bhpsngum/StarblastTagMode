@@ -17,12 +17,32 @@ The game ends when one team "tags" all the players in that server.
 * Map pattern: randomly created by the server
 * Team stats and Leaderboard in scoreboard for all players (with team colors!)
 * Number of players per team will be updated through logging in the console (you can disable or enable them by using `update_stats <disable/enable>` command)
+If you want to customize the number of teams & names, etc. See the [Extended version](#extendedversionbeta)
 
 ### Codes
 
 There are 2 codes available:
 * [Full version](StarblastTagMode.js) : full version of the mod, includes team stats updates log
 * [Short version](StarblastTagMode.short.js) (Recommended) : If you don't care what the f*ck the console writes :D
+
+### Extended version (beta)
+
+The Tag Mode extended version allows you to customize some properties (others will be released in the future)
+Current Tag Mode properties in `this.options`:
+
+* `friendly_colors` : Number of teams. Minimum 2 teams (4 if omitted)
+* `tag_names` : An array for custom team names (will use default names if omitted)
+* `tag_time` : Minimum match time (by minutes) default of 5 minutes if omitted 
+
+For example:
+```js
+this.options = {
+  friendly_colors: 6,
+  tag_names: ["This","is","only","example","for","setup"],
+  tag_time: 6
+}
+```
+
 
 ~~(*also you can add this [extra code](extra.js) to the end of the mod code to see some new features :D*)~~
 ```js
