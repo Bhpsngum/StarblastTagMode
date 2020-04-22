@@ -279,7 +279,7 @@ this.tick = function(game) {
     for (let ship of game.ships) {
       if (!ship.custom.init) {
         let pos=sort(stats.sides),index;
-        if (game.step > (this.options.tag_time||18000) && stats.sides[ship.team] === 0) {
+        if (game.step > (this.options.tag_time||5)*3600 && stats.sides[ship.team] === 0) {
           for (index=pos.length-1;index>=0;index--) {
             if (stats.sides[pos[index]] > 0) {
               ship.set({team:pos[index]});
@@ -296,7 +296,7 @@ this.tick = function(game) {
       if (ship.highscore<ship.score) ship.highscore=ship.score;
     }
     update();
-    if (Math.max(...stats.sides) == game.ships.length && game.step > (this.options.tag_time||18000) && endgame === 0) {
+    if (Math.max(...stats.sides) == game.ships.length && game.step > (this.options.tag_time||5)*3600 && endgame === 0) {
       endgame=1;
       for (let ship of game.ships) {
         updateinfo(ship,stats.names[stats.sides.indexOf(Math.max(...stats.sides))]+" team wins!",stats.hue[stats.sides.indexOf(Math.max(...stats.sides))]);
