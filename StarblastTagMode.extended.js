@@ -76,9 +76,9 @@ var stats = {
   hue:[],
   names: []
 }
-let teams=this.options.friendly_colors||4,hue=360/teams,huestats=0,dup=0;
+let teams=this.options.friendly_colors||4,huestats=0,dup=0;
 teams=(teams<2)?2:teams;
-let names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
+let hue=360/teams,names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
 for (let i=0;i<teams;i++)
 {
   stats.sides.push(0);
