@@ -42,7 +42,9 @@ this.options = {
   tag_time: 6
 }
 ```
-
+As usual, there are 2 codes available:
+* [Short version](StarblastTagMode.extended.short.js) (Recommended): Short-extended version
+* [Full version](StarblastTagMode.extended.js): Full version (includes team stats update logs)
 
 ~~(*also you can add this [extra code](extra.js) to the end of the mod code to see some new features :D*)~~
 ```js
