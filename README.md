@@ -17,6 +17,7 @@ The game ends when one team "tags" all the players in that server.
 * Map pattern: randomly created by the server
 * Team stats and Leaderboard in scoreboard for all players (with team colors!)
 * Number of players per team will be updated through logging in the console (you can disable or enable them by using `update_stats <disable/enable>` command)
+
 If you want to customize the number of teams & names, etc. See the [Extended version](#extendedversionbeta)
 
 ### Codes
