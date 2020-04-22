@@ -226,7 +226,7 @@ update = function() {
   if (loop>1) dominate=-1;
   if (dominate != predominate && dominate != -1 && game.ships.length > 1) {
     for (let ship of game.ships) {
-      let str=((dominate === ship.team)?("Your team"):(stats.hue[dominate]))+" is dominating!";
+      let str=((dominate === ship.team)?("Your team"):(stats.names[dominate]))+" is dominating!";
       updateinfo(ship,str,stats.hue[dominate]);
     }
   }
