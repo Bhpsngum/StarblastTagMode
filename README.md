@@ -29,6 +29,7 @@ There are 2 codes available:
 ### Extended version (beta)
 
 The Tag Mode extended version allows you to customize some properties (others will be released in the future)
+
 Current Tag Mode properties in `this.options`:
 
 * `friendly_colors` : Number of teams. Minimum 2 teams (4 if omitted)
@@ -43,6 +44,9 @@ this.options = {
   tag_time: 6
 }
 ```
+And here is the result:
+
+![Tag Mode example](https://raw.githubusercontent.com/Bhpsngum/img-src/master/tagmodeexamples.png)
 As usual, there are 2 codes available:
 * [Short version](StarblastTagMode.extended.short.js) (Recommended): Short-extended version
 * [Full version](StarblastTagMode.extended.js): Full version (includes team stats update logs)
