@@ -32,7 +32,7 @@ The Tag Mode extended version allows you to customize some properties (others wi
 
 Current Tag Mode properties in `this.options`:
 
-* `friendly_colors` : Number of teams. Minimum 2 teams (4 if omitted)
+* `friendly_colors` : Number of teams. Required (if omitted or lower than 2, the game will stop)
 * `tag_names` : An array for custom team names (will use default names if omitted)
 * `tag_time` : Minimum match time (by minutes) default of 5 minutes if omitted 
 
