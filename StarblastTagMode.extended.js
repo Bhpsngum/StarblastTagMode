@@ -49,6 +49,7 @@ this.options = {
   rcs_toggle:true,
   map_size:40,
   root_mode:"",
+  friendly_colors:4,
   vocabulary:vocabulary,
   soundtrack:"argon.mp3"
 };
@@ -71,27 +72,30 @@ var sort = function(arr) {
   return index;
 };
 /* Code for initial setup. Don't change anything between the code blocks!*/
-var stats = {
-  sides:[],
-  hue:[],
-  names: []
-}
-let teams=this.options.friendly_colors||4,huestats=0,dup=0;
-teams=(teams<2)?2:teams;
-let hue=360/teams,names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
-for (let i=0;i<teams;i++)
+let start=(this.options.friendly_colors && this.options.friendly_colors>1);
+if (!start)
 {
-  stats.sides.push(0);
-  stats.hue.push(huestats);
-  huestats+=hue;
-  if (!dnames.length)
-  {
-    dup++;
-    dnames=[...names];
+  var stats = {
+    sides:[],
+    hue:[],
+    names: []
   }
-  let rnd=dnames[rand(dnames.length)];
-  dnames.splice(dnames.indexOf(rnd),1);
-  stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
+  let teams=this.options.friendly_colors,huestats=0,hue=360/teams,dup=0;
+  let names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
+  for (let i=0;i<teams;i++)
+  {
+    stats.sides.push(0);
+    stats.hue.push(huestats);
+    huestats+=hue;
+    if (!dnames.length)
+    {
+      dup++;
+      dnames=[...names];
+    }
+    let rnd=dnames[rand(dnames.length)];
+    dnames.splice(dnames.indexOf(rnd),1);
+    stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
+  }
 }
 /* End of initial setup */
 sort = function(arr) {
@@ -258,15 +262,23 @@ game.modding.tick = function(t) {
 this.tick = function(game) {
   if (loginfo == 1) {
     loginfo=0;
-    echo("\nStarblast Tag Mode - by Bhpsngum");
-    echo("type 'update_stats enable/disable' to enable/disable");
-    echo("team stats update logs\n");
-    echo("List of team name and their team ids (for players logging):\n")
-    for (let i=0;i<stats.names.length;i++) echo(i+": "+stats.names[i]);
-    echo("\n");
-    let ec="";
-    for (let i=0;i<stats.names.length;i++) ec+=i+":0 ; ";
-    echo(ec);
+    if (!start) 
+    {
+      game.modding.terminal.error("Error: Number of teams must be higher than 1");
+      game.modding.commands.stop();
+    }
+    else
+    {
+      echo("\nStarblast Tag Mode - by Bhpsngum");
+      echo("type 'update_stats enable/disable' to enable/disable");
+      echo("team stats update logs\n");
+      echo("List of team name and their team ids (for players logging):\n")
+      for (let i=0;i<stats.names.length;i++) echo(i+": "+stats.names[i]);
+      echo("\n");
+      let ec="";
+      for (let i=0;i<stats.names.length;i++) ec+=i+":0 ; ";
+      echo(ec);
+    }
   }
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
