@@ -1,5 +1,5 @@
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
-var endgame=0,dominate=-1,predominate=-1,loginfo=1;
+var endgame=0,dominate=-1,predominate=-1;
 var vocabulary = [
       { text: "Hello", icon:"\u0045", key:"O" },
       { text: "Bye", icon:"\u0046", key:"B" },
@@ -53,52 +53,53 @@ this.options = {
   vocabulary:vocabulary,
   soundtrack:"argon.mp3"
 };
-var rand = function(lol) {
-  return Math.floor((Math.random() * lol));
-};
-var sort = function(arr) {
-  let array=[...arr];
-  let index=new Array(array.length);
-  for (let c=0;c<index.length;c++) index[c]=c;
-  let i=0;
-  while (i<array.length-1) {
-    if (array[i]<array[i+1]) {
-      array[i+1]=[array[i],array[i]=array[i+1]][0];
-      index[i+1]=[index[i],index[i]=index[i+1]][0];
-      if (i>0) i-=2;
-    }
-    i++;
-  }
-  return index;
-};
 /* Code for initial setup. Don't change anything between the code blocks!*/
-let start=(this.options.friendly_colors && this.options.friendly_colors>1);
-if (!start)
-{
-  var stats = {
-    sides:[],
-    hue:[],
-    names: []
-  }
-  let teams=this.options.friendly_colors,huestats=0,hue=360/teams,dup=0;
-  let names=this.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
-  for (let i=0;i<teams;i++)
+var stats = {
+  sides:[],
+  hue:[],
+  names: []
+}, __fail__;
+this.tick = function(game) {
+  if (game.options.friendly_colors > 1)
   {
-    stats.sides.push(0);
-    stats.hue.push(huestats);
-    huestats+=hue;
-    if (!dnames.length)
+    let teams=game.options.friendly_colors,huestats=0,hue=360/teams,dup=0;
+    let names=game.modding.context.options.tag_names||["Anarchist Concord Vega","Andromeda Union","Federation","Galactic Empire","Rebel Alliance","Solaris Dominion","Sovereign Trappist Colonies"],dnames=[...names];
+    for (let i=0;i<teams;i++)
     {
-      dup++;
-      dnames=[...names];
+      stats.sides.push(0);
+      stats.hue.push(huestats);
+      huestats+=hue;
+      if (!dnames.length)
+      {
+        dup++;
+        dnames=[...names];
+      }
+      let rnd=dnames[rand(dnames.length)];
+      dnames.splice(dnames.indexOf(rnd),1);
+      stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
     }
-    let rnd=dnames[rand(dnames.length)];
-    dnames.splice(dnames.indexOf(rnd),1);
-    stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
+    echo("\nStarblast Tag Mode - by Bhpsngum");
+    echo("type 'update_stats enable/disable' to enable/disable");
+    echo("team stats update logs\n");
+    echo("List of team name and their team ids (for players logging):\n")
+    for (let i=0;i<stats.names.length;i++) echo(i+": "+stats.names[i]);
+    echo("\n");
+    let ec="";
+    for (let i=0;i<stats.names.length;i++) ec+=i+":0 ; ";
+    echo(ec);
+    this.tick = main_game;
+  }
+  else if (!__fail__)
+  {
+    game.modding.terminal.error("Error: Number of teams must be higher than 1");
+    game.modding.commands.stop();
+    __fail__ = true;
   }
 }
 /* End of initial setup */
-sort = function(arr) {
+var rand = function(lol) {
+  return Math.floor((Math.random() * lol));
+}, sort = function(arr) {
   let array=[...arr];
   let index=new Array(array.length);
   for (let c=0;c<index.length;c++) index[c]=c;
@@ -112,16 +113,14 @@ sort = function(arr) {
     i++;
   }
   return index;
-};
-updateinfo = function(ship,text,color) {
+}, updateinfo = function(ship,text,color) {
   info.components = [
     { type: "text",position: [0,0,100,100],color: `hsla(${color},100%,50%,1)`,value: text}
   ];
   ship.setUIComponent(info);
   info.components = [];
   setTimeout(function(){ship.setUIComponent(info)},3000);
-};
-updatescoreboard = function() {
+}, updatescoreboard = function() {
   scoreboard.components = [
     { type:"box",position:[0,1,100,8],fill:"#456",stroke:"#CDE",width:2},
     { type: "text",position: [0,1,100,8],color: "#FFF",value: "Team stats ("+stats.sides.length+")"}
@@ -159,8 +158,7 @@ updatescoreboard = function() {
     }
   }
   for (let ship of game.ships) deco(ship,pos,topp,stats);
-};
-deco = function(ship,stat,score,stats) {
+}, deco = function(ship,stat,score,stats) {
   let line=stat.indexOf(ship.team);
   let origin=[...scoreboard.components];
   if (line == -1) {
@@ -185,19 +183,24 @@ deco = function(ship,stat,score,stats) {
   }
   ship.setUIComponent(scoreboard);
   scoreboard.components=[...origin];
-};
-updatesides = function() {
+}, updatesides = function() {
   let presides=[...stats.sides];
   stats.sides=[];
   for (let i=0;i<presides.length;i++) stats.sides.push(0);
   for (let ship of game.ships) {
     if (ship.alive === true) stats.sides[ship.team]++;
   }
-};
-PlayerBox = function(pos) {
+  for (let i=0;i<presides.length;i++) {
+    if (stats.sides[i] != presides[i] && logstats == 1) {
+      let ec="";
+      for (let i=0;i<stats.names.length;i++) ec+=i+":"+stats.sides[i]+" ; ";
+      echo(ec);
+      break;
+    }
+  }
+}, PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
-};
-Tag = function(indtext,param,pos,color,al,size) {
+}, Tag = function(indtext,param,pos,color,al,size) {
   let obj= {type: indtext,position: [0,pos,100-(size||0),8],color: `hsla(${color},100%,50%,1)`,align:al};
   switch(indtext) {
     case "text":
@@ -208,8 +211,7 @@ Tag = function(indtext,param,pos,color,al,size) {
       break;
   }
   return obj;
-};
-update = function() {
+}, update = function() {
   updatesides();
   let loop=0;
   for (let i=0;i<4;i++) {
@@ -227,16 +229,31 @@ update = function() {
     }
   }
   updatescoreboard();
-};
-this.tick = function(game) {
-  if (loginfo == 1) {
-    loginfo=0;
-    if (!start) 
-    {
-      game.modding.terminal.error("Error: Number of teams must be higher than 1");
-      game.modding.commands.stop();
-    }
+}
+game.modding.commands.update_stats = function(req) {
+  switch ((req.replace(/\s+/g," ").split(' ')[1]||"").toUpperCase()) {
+    case "ENABLE":
+      logstats=1;
+      echo("Enabled!");
+      break;
+    case "DISABLE":
+      logstats=0;
+      echo("Disabled!");
+      break;
+    case "":
+      game.modding.terminal.error("TypeError: missing parameter");
+      break;
+    default:
+      echo("I told you to type only 'disable' or 'enable'\nBAKA!!");
   }
+}
+game.modding.tick = function(t) {
+  this.game.tick(t);
+  if (this.context.tick != null) {
+    this.context.tick(this.game);
+  }
+};
+var main_game = function(game) {
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
     {
@@ -247,7 +264,7 @@ this.tick = function(game) {
     for (let ship of game.ships) {
       if (!ship.custom.init) {
         let pos=sort(stats.sides),index;
-        if (game.step > (this.options.tag_time||5)*3600 && stats.sides[ship.team] === 0) {
+        if (game.step > (game.modding.context.options.tag_time||5)*3600 && stats.sides[ship.team] === 0) {
           for (index=pos.length-1;index>=0;index--) {
             if (stats.sides[pos[index]] > 0) {
               ship.set({team:pos[index]});
