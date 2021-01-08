@@ -78,15 +78,6 @@ this.tick = function(game) {
       dnames.splice(dnames.indexOf(rnd),1);
       stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
     }
-    echo("\nStarblast Tag Mode - by Bhpsngum");
-    echo("type 'update_stats enable/disable' to enable/disable");
-    echo("team stats update logs\n");
-    echo("List of team name and their team ids (for players logging):\n")
-    for (let i=0;i<stats.names.length;i++) echo(i+": "+stats.names[i]);
-    echo("\n");
-    let ec="";
-    for (let i=0;i<stats.names.length;i++) ec+=i+":0 ; ";
-    echo(ec);
     this.tick = main_game;
   }
   else if (!__fail__)
@@ -190,14 +181,6 @@ var rand = function(lol) {
   for (let ship of game.ships) {
     if (ship.alive === true) stats.sides[ship.team]++;
   }
-  for (let i=0;i<presides.length;i++) {
-    if (stats.sides[i] != presides[i] && logstats == 1) {
-      let ec="";
-      for (let i=0;i<stats.names.length;i++) ec+=i+":"+stats.sides[i]+" ; ";
-      echo(ec);
-      break;
-    }
-  }
 }, PlayerBox = function(pos) {
   return { type:"box",position:[0,pos,100,10],fill:"#384A5C",width:2};
 }, Tag = function(indtext,param,pos,color,al,size) {
@@ -229,31 +212,7 @@ var rand = function(lol) {
     }
   }
   updatescoreboard();
-}
-game.modding.commands.update_stats = function(req) {
-  switch ((req.replace(/\s+/g," ").split(' ')[1]||"").toUpperCase()) {
-    case "ENABLE":
-      logstats=1;
-      echo("Enabled!");
-      break;
-    case "DISABLE":
-      logstats=0;
-      echo("Disabled!");
-      break;
-    case "":
-      game.modding.terminal.error("TypeError: missing parameter");
-      break;
-    default:
-      echo("I told you to type only 'disable' or 'enable'\nBAKA!!");
-  }
-}
-game.modding.tick = function(t) {
-  this.game.tick(t);
-  if (this.context.tick != null) {
-    this.context.tick(this.game);
-  }
-};
-var main_game = function(game) {
+}, main_game = function(game) {
   if (game.step % 30 === 0) {
     if (game.step % 1200 === 0)
     {
