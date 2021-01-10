@@ -8,7 +8,7 @@ I've first seen this mode when I play [Diep.io](https://diep.io), in short words
 The game ends when one team "tags" all the players in that server.
 
 ## Special thanks to
-* **123 Notus** for his idea of multi-staged Tag Mode
+* **123 Notus** for his idea of multi-stage Tag Mode
 ## Codes
 
 There are 2 codes available:

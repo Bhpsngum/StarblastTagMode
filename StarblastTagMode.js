@@ -1,3 +1,10 @@
+/*
+STARBLAST TAG MODE (STA) - FULL VERSION
+Coding by Bhpsngum
+Idea of multi-stage match by 123 Notus
+*/
+
+
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
 var endgame=0,dominate=-1,predominate=-1,logstats=1,end=0;
 var vocabulary = [
@@ -111,7 +118,9 @@ this.tick = function(game) {
       dnames.splice(dnames.indexOf(rnd),1);
       stats.names.push(`${rnd}${(!dup)?"":" "+(dup+1)}`);
     }
-    echo("\nStarblast Tag Mode - by Bhpsngum");
+    echo("\nStarblast Tag Mode (STA)");
+    echo("Coding by Bhpsngum");
+    echo("Idea of multi-stage match by 123 Notus\n");
     echo("type 'update_stats enable/disable' to enable/disable");
     echo("team stats update logs\n");
     echo("List of team name and their team ids (for players logging):\n")

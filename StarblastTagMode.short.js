@@ -1,3 +1,9 @@
+/*
+STARBLAST TAG MODE (STA) - SHORT VERSION
+Coding by Bhpsngum
+Idea of multi-stage match by 123 Notus
+*/
+
 var collectibles = [10,11,12,20,21,40,41,42,90,91];
 var endgame=0,dominate=-1,predominate=-1;
 var vocabulary = [
