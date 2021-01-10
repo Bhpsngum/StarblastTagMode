@@ -221,10 +221,7 @@ var Mining = function(game) { // Stage 1: Mining
           });
         },4000);
       }
-    }
-    if (game.ships.length === 0 && endgame == 1 && end === 0) {
       echo("Game completed!\nThanks for playing!");
-      end=1;
     }
   }
 }, setStage = function(n) {
@@ -400,7 +397,8 @@ this.event = function(event,game) {
      break;
    case "ship_destroyed":
      if (event.killer !== null) {
-       event.ship.set({team:event.killer.team});
+       event.ship.set({team:event.killer.custom.team});
+       event.ship.custom.team = event.killer.custom.team;
        event.killer.frag++;
      }
      if (event.ship !== null) {

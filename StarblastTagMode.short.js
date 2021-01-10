@@ -360,7 +360,8 @@ this.event = function(event,game) {
      break;
    case "ship_destroyed":
      if (event.killer !== null) {
-       event.ship.set({team:event.killer.team});
+       event.ship.set({team:event.killer.custom.team});
+       event.ship.custom.team = event.killer.custom.team;
        event.killer.frag++;
      }
      if (event.ship !== null) {
