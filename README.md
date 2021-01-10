@@ -7,34 +7,33 @@ by Bhpsngum
 I've first seen this mode when I play [Diep.io](https://diep.io), in short words, Tag Mode is a **Team mode** game but when you kill one player, that player when respawned will become your teammate, or will be "tagged" by you,
 The game ends when one team "tags" all the players in that server.
 
-## Starblast Tag Mode - short description
-
-### Information
-
-* Max players: 120
-* Number of teams: 4
-* Map size: 40
-* Map pattern: randomly created by the server
-* Team stats and Leaderboard in scoreboard for all players (with team colors!)
-* Number of players per team will be updated through logging in the console (you can disable or enable them by using `update_stats <disable/enable>` command)
-
-If you want to customize the number of teams & names, etc. See the [Extended version](#extended-version-beta)
-
-### Codes
+## Codes
 
 There are 2 codes available:
 * [Full version](StarblastTagMode.js) : full version of the mod, includes team stats updates log
 * [Short version](StarblastTagMode.short.js) (Recommended) : If you don't care what the f*ck the console writes :D
 
-### Extended version (beta)
-
-The Tag Mode extended version allows you to customize some properties (others will be released in the future)
-
+## Initialization
 Current Tag Mode properties in `this.options`:
 
 * `friendly_colors` : Number of teams. Required (if omitted or lower than 2, the game will stop)
+* `tag_level`: Tag level that triggers Stage 2
 * `tag_names` : An array for custom team names (will use default names if omitted)
-* `tag_time` : Minimum match time (by minutes). Default of 5 minutes if omitted
+* `tag_mining_time`: Stage 1 maximum time (if there are no ships that meet the required tier)
+* `tag_trigger_time`: Stage 2 duration
+* `tag_enter_time` : Minimum match time (by minutes). Default of 5 minutes if omitted
+* `hues`: team hues
+
+Here is a list of value ranges of those properties:
+| Property | Type | Unit (per item) | Min value (per item) | Max value (per item) | Default value |
+| - | - | - | - | - | - |
+| friendly_colors | integer | Number of teams | 2 | Infinity | Mod stops |
+| tag_level | integer | level | 1 | `max_level` property value | lowest value between `max_level` and 6 |
+| tag_mining_time | integer | minute | 10 | 30 | 10 |
+| tag_trigger_time | integer | minute | 0 | 10 | 5 |
+| tag_enter_time | integer | minute | 0 | 10 | 5 |
+| tag_names | array | string | 0 | 360 | List of default names |
+| hues | array | hue(number) | 0 | 360 | Automatic coloring |
 
 For example:
 ```js
@@ -47,9 +46,6 @@ this.options = {
 And here is the result:
 
 ![Tag Mode example](https://raw.githubusercontent.com/Bhpsngum/img-src/master/tagmodeexamples.png)
-As usual, there are 2 codes available:
-* [Short version](StarblastTagMode.extended.short.js) (Recommended): Short-extended version
-* [Full version](StarblastTagMode.extended.js): Full version (includes team stats update logs)
 
 **Note:** If you don't know what you're doing, please DO NOT MODIFY the mod code (except `this.options` part, feel free to modify it :D)
 
