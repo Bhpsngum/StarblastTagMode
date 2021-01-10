@@ -49,7 +49,7 @@ this.options = {
   rcs_toggle:true,
   map_size:40,
   tag_mining_time: 10,
-  tag_enter_time: 10,
+  tag_enter_time: 5,
   tag_trigger_time: 5,
   tag_level: 6,
   tag_names: [],
