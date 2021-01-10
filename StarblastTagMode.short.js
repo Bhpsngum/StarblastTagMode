@@ -55,7 +55,7 @@ this.options = {
   tag_names: [],
   hues: [],
   root_mode:"",
-  friendly_colors:3,
+  friendly_colors:4,
   vocabulary:vocabulary,
   soundtrack:"argon.mp3"
 };
