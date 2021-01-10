@@ -40,7 +40,7 @@ For example:
 this.options = {
   friendly_colors: 6,
   tag_names: ["This","is","only","example","for","setup"],
-  tag_time: 6
+  tag_enter_time: 6
 }
 ```
 And here is the result:
