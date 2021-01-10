@@ -122,7 +122,7 @@ this.tick = function(game) {
 }
 var Mining = function(game) { // Stage 1: Mining
   if (game.step % 30 === 0) setStage(0);
-  if (game.ships.filter(i => i.type/100 >= this.options.tag_level).length >= 1 || game.step >= this.options.tag_mining_time*3600) {
+  if (game.ships.filter(i => i.type/100 >= this.options.tag_level).length >= stats.count || game.step >= this.options.tag_mining_time*3600) {
     timer = this.options.tag_trigger_time*3600;
     this.tick = PreTag;
   }
