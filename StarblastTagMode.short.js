@@ -135,7 +135,7 @@ var Mining = function(game) { // Stage 1: Mining
   else for (let ship of game.ships) {
     if (!ship.custom.staged) {
       ship.custom.staged = true;
-      ship.set({team: 0, hue: stats.hue[0]});
+      ship.set({team: 0});
     }
   }
 }, PreTag = function(game) { // Stage 2: Pre-Tag
