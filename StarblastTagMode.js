@@ -206,12 +206,9 @@ var Mining = function(game) { // Stage 1: Mining
         }
         ship.custom.team = pos[index]==null?ship.team:pos[index];
         ship.custom.init = {team:ship.custom.team};
-        ship.frag=0;
-        ship.death=0;
-        ship.highscore=ship.score;
         ship.set({hue:stats.hue[ship.custom.team],invulnerable:300});
       }
-      if (ship.highscore<ship.score) ship.highscore=ship.score;
+      if (isNaN(ship.custom.highscore) || ship.custom.highscore<ship.score) ship.custom.highscore=ship.score;
     }
     update();
     if (Math.max(...stats.sides) == game.ships.filter(i=>i.alive).length && game.step > game.tag_step && !endgame) {
@@ -222,9 +219,9 @@ var Mining = function(game) { // Stage 1: Mining
         setTimeout(function() {
           ship.gameover({
             "Score":ship.score,
-            "Frags":ship.frag,
-            "Deaths":ship.death,
-            "High score":ship.highscore,
+            "Frags":ship.custom.frag,
+            "Deaths":ship.custom.death,
+            "High score":ship.custom.highscore,
             "First team joined":stats.names[ship.custom.init.team],
             "Last team joined":stats.names[ship.custom.team]
           });
@@ -392,28 +389,24 @@ game.modding.commands.update_stats = function(req) {
       echo("I told you to type only 'disable' or 'enable'\nBAKA!!");
   }
 }
-game.modding.tick = function(t) {
-  this.game.tick(t);
-  if (this.context.tick != null) {
-    this.context.tick(this.game);
-  }
-}
 this.event = function(event,game) {
- switch(event.name)
- {
-   case "ship_spawned":
-     event.ship.set({hue:stats.hue[event.ship.custom.team],invulnerable:300});
-     break;
-   case "ship_destroyed":
-     if (event.killer !== null) {
-       event.ship.set({team:event.killer.custom.team});
-       event.ship.custom.team = event.killer.custom.team;
-       event.killer.frag++;
-     }
-     if (event.ship !== null) {
-       event.ship.death++;
-       event.ship.set({score:Math.ceil(event.ship.score/2)});
-     }
-     break;
- }
+  let ship = event.ship;
+  if (ship != null) switch(event.name)
+  {
+    case "ship_spawned":
+      ship.set({hue:stats.hue[ship.custom.team],invulnerable:300});
+      break;
+    case "ship_destroyed":
+      let killer = event.killer;
+      if (killer != null) {
+        ship.set({team: killer.custom.team});
+        ship.custom.team = killer.custom.team;
+        killer.custom.frag = (Number(killer.custom.frag) || 0) + 1;
+      }
+      if (ship != null) {
+        ship.custom.death = (Number(ship.custom.death) || 0) + 1;
+        ship.set({score:Math.ceil(ship.score/2)});
+      }
+      break;
+  }
 };
